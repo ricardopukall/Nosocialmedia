@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>¿Seguro?</title>
+<title>No Social Media</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
 
@@ -30,10 +30,8 @@
     overflow-x: hidden;
   }
 
-  /* ---- HEADER TAPE ---- */
   .tape { display: none; }
 
-  /* ---- MAIN WRAPPER ---- */
   .wrapper {
     width: 100%;
     max-width: 440px;
@@ -43,7 +41,6 @@
     gap: 28px;
   }
 
-  /* ---- BIG QUESTION ---- */
   .headline {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(52px, 16vw, 80px);
@@ -63,12 +60,16 @@
     line-height: 1.5;
   }
 
-  /* ---- STAT BOX ---- */
+  /* stat-box oculto por defecto, solo visible durante contador */
   .stat-box {
     background: var(--warn);
     border: 1.5px solid #ccc4b4;
     padding: 16px 18px;
     border-radius: 2px;
+    display: none;
+  }
+  .stat-box.visible {
+    display: block;
   }
   .stat-box p {
     font-size: 12px;
@@ -81,7 +82,6 @@
     font-weight: 700;
   }
 
-  /* ---- NETWORK PICKER ---- */
   .label {
     font-size: 11px;
     letter-spacing: 2px;
@@ -127,7 +127,6 @@
     filter: invert(1);
   }
 
-  /* ---- COUNTER SECTION ---- */
   .counter-section {
     display: none;
     flex-direction: column;
@@ -180,7 +179,6 @@
     transition: width 1s linear;
   }
 
-  /* rotating uncomfortable messages */
   .message-box {
     font-size: 13px;
     font-style: italic;
@@ -192,7 +190,6 @@
     transition: opacity 0.4s;
   }
 
-  /* ---- GO BUTTON ---- */
   .go-btn {
     display: none;
     width: 100%;
@@ -216,7 +213,6 @@
     display: block;
   }
 
-  /* ---- CANCEL LINK ---- */
   .cancel {
     text-align: center;
     font-size: 12px;
@@ -232,7 +228,6 @@
 
   .footer { display: none; }
 
-  /* ---- SCAN LINE TEXTURE ---- */
   body::after {
     content: '';
     position: fixed;
@@ -256,11 +251,12 @@
 <div class="wrapper">
 
   <div>
-    <div class="headline">¿De<br>verdad<br><span>ahora?</span></div>
+    <div class="headline">NO<br>SOCIAL<br><span>MEDIA</span></div>
     <p class="subline">Ibas a entrar sin pensarlo.<br>Espera 30 segundos. Luego decides.</p>
   </div>
 
-  <div class="stat-box">
+  <!-- stat-box: ahora oculto por defecto, aparece solo con el contador -->
+  <div class="stat-box" id="statBox">
     <p id="statText">…</p>
   </div>
 
@@ -268,17 +264,14 @@
     <p class="label">¿A dónde ibas?</p>
     <div class="networks">
       <button class="net-btn" onclick="selectNet(this, 'https://twitter.com', 'Twitter / X')">
-        <!-- X / Twitter -->
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.261 5.636 5.903-5.636zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         X
       </button>
       <button class="net-btn" onclick="selectNet(this, 'https://facebook.com', 'Facebook')">
-        <!-- Facebook -->
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         Facebook
       </button>
       <button class="net-btn" onclick="selectNet(this, 'https://instagram.com', 'Instagram')">
-        <!-- Instagram -->
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
         Instagram
       </button>
@@ -304,6 +297,7 @@
 </div>
 
 <script>
+  // Tips que rotan SOLO durante el contador (stat-box oculto al inicio)
   const stats = [
     "El usuario promedio revisa su teléfono <strong>96 veces al día</strong>. La mayoría de esas veces no recuerda por qué lo abrió.",
     "Pasamos un promedio de <strong>2 horas y 27 minutos</strong> al día en redes sociales. Al año, eso son <strong>37 días completos</strong>.",
@@ -317,21 +311,8 @@
     "Abrir una red social <strong>sin intención</strong> es como entrar a un supermercado con hambre y sin lista.",
   ];
 
-  let statIndex = 0;
-  function rotateStat() {
-    const el = document.getElementById('statText');
-    el.style.opacity = '0';
-    setTimeout(() => {
-      statIndex = (statIndex + 1) % stats.length;
-      el.innerHTML = stats[statIndex];
-      el.style.opacity = '1';
-    }, 400);
-  }
-
-  // Init first stat randomly and rotate every 5s
-  statIndex = Math.floor(Math.random() * stats.length);
-  document.getElementById('statText').innerHTML = stats[statIndex];
-  setInterval(rotateStat, 5000);
+  // Mensajes del contador (texto pequeño debajo del número)
+  const messages = [
     "¿Qué esperas encontrar que no estaba hace 10 minutos?",
     "La mayoría de scrolls no recuerdas ni lo que viste.",
     "Todavía puedes cerrar esto.",
@@ -343,6 +324,19 @@
     "El feed siempre estará ahí. Este momento, no.",
     "Puedes parar cuando quieras.",
   ];
+
+  let statIndex = 0;
+  let statInterval = null;
+
+  function rotateStat() {
+    const el = document.getElementById('statText');
+    el.style.opacity = '0';
+    setTimeout(() => {
+      statIndex = (statIndex + 1) % stats.length;
+      el.innerHTML = stats[statIndex];
+      el.style.opacity = '1';
+    }, 400);
+  }
 
   let selectedUrl = null;
   let timer = null;
@@ -358,6 +352,7 @@
 
   function startCounter(name) {
     clearInterval(timer);
+    clearInterval(statInterval);
     currentSeconds = TOTAL;
 
     const section = document.getElementById('counterSection');
@@ -366,6 +361,16 @@
     const msgEl = document.getElementById('messageBox');
     const goBtn = document.getElementById('goBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const statBox = document.getElementById('statBox');
+    const statText = document.getElementById('statText');
+
+    // Mostrar stat-box con tip aleatorio al iniciar el contador
+    statIndex = Math.floor(Math.random() * stats.length);
+    statText.innerHTML = stats[statIndex];
+    statBox.classList.add('visible');
+
+    // Rotar tips cada 5s mientras dura el contador
+    statInterval = setInterval(rotateStat, 5000);
 
     section.classList.add('visible');
     goBtn.classList.remove('visible');
@@ -380,7 +385,6 @@
     let msgIndex = Math.floor(Math.random() * messages.length);
     msgEl.textContent = messages[msgIndex];
 
-    // Force reflow for transition restart
     void fill.offsetWidth;
     fill.style.transition = 'width 1s linear';
 
@@ -392,7 +396,6 @@
 
       if (currentSeconds <= 10) numEl.classList.add('urgent');
 
-      // rotate message every ~8 seconds
       if (currentSeconds % 8 === 0) {
         msgEl.style.opacity = '0';
         setTimeout(() => {
@@ -404,6 +407,7 @@
 
       if (currentSeconds <= 0) {
         clearInterval(timer);
+        clearInterval(statInterval);
         fill.style.width = '100%';
         msgEl.textContent = "Puedes entrar. Todavía puedes no hacerlo.";
         goBtn.href = selectedUrl;
@@ -415,8 +419,10 @@
 
   function cancelAction() {
     clearInterval(timer);
+    clearInterval(statInterval);
     document.querySelectorAll('.net-btn').forEach(b => b.classList.remove('selected'));
     document.getElementById('counterSection').classList.remove('visible');
+    document.getElementById('statBox').classList.remove('visible');
     document.getElementById('goBtn').style.display = 'none';
     document.getElementById('cancelBtn').style.display = 'none';
     document.getElementById('counterNum').classList.remove('urgent');
