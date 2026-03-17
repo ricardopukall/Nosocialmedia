@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Un solo fondo negro con esquinas redondeadas -->
+  <rect width="512" height="512" rx="80" ry="80" fill="#111111"/>
+
+  <!-- "NO" blanco -->
+  <text
+    x="256" y="156"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-family="'Arial Black', Arial, sans-serif"
+    font-size="148"
+    font-weight="900"
+    fill="#ffffff"
+    letter-spacing="-3"
+  >NO</text>
+
+  <!-- "SOCIAL" blanco -->
+  <text
+    x="256" y="290"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-family="'Arial Black', Arial, sans-serif"
+    font-size="110"
+    font-weight="900"
+    fill="#ffffff"
+    letter-spacing="-3"
+  >SOCIAL</text>
+
+  <!-- "MEDIA" rojo -->
+  <text
+    x="256" y="410"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-family="'Arial Black', Arial, sans-serif"
+    font-size="128"
+    font-weight="900"
+    fill="#c0392b"
+    letter-spacing="-3"
+  >MEDIA</text>
+</svg>

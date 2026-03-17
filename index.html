@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>No Social Media</title>
+
+<!-- PWA + ícono -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#1a1a1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NSM">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<link rel="apple-touch-icon" href="./icon.svg">
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
 
@@ -48,9 +59,7 @@
     letter-spacing: -1px;
     color: var(--ink);
   }
-  .headline span {
-    color: var(--red);
-  }
+  .headline span { color: var(--red); }
 
   .subline {
     font-size: 13px;
@@ -60,7 +69,6 @@
     line-height: 1.5;
   }
 
-  /* stat-box oculto por defecto, solo visible durante contador */
   .stat-box {
     background: var(--warn);
     border: 1.5px solid #ccc4b4;
@@ -68,19 +76,14 @@
     border-radius: 2px;
     display: none;
   }
-  .stat-box.visible {
-    display: block;
-  }
+  .stat-box.visible { display: block; }
   .stat-box p {
     font-size: 12px;
     line-height: 1.7;
     color: #555;
     transition: opacity 0.4s;
   }
-  .stat-box strong {
-    color: var(--ink);
-    font-weight: 700;
-  }
+  .stat-box strong { color: var(--ink); font-weight: 700; }
 
   .label {
     font-size: 11px;
@@ -111,30 +114,12 @@
     font-size: 12px;
     color: var(--muted);
   }
-  .net-btn svg {
-    width: 24px;
-    height: 24px;
-    opacity: 0.5;
-    transition: opacity 0.15s;
-  }
-  .net-btn.selected {
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--bg);
-  }
-  .net-btn.selected svg {
-    opacity: 1;
-    filter: invert(1);
-  }
+  .net-btn svg { width: 24px; height: 24px; opacity: 0.5; transition: opacity 0.15s; }
+  .net-btn.selected { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+  .net-btn.selected svg { opacity: 1; filter: invert(1); }
 
-  .counter-section {
-    display: none;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .counter-section.visible {
-    display: flex;
-  }
+  .counter-section { display: none; flex-direction: column; gap: 16px; }
+  .counter-section.visible { display: flex; }
 
   .counter-wrap {
     display: flex;
@@ -153,9 +138,7 @@
     color: var(--ink);
     transition: color 0.3s;
   }
-  .counter-num.urgent {
-    color: var(--red);
-  }
+  .counter-num.urgent { color: var(--red); }
 
   .counter-label {
     font-size: 11px;
@@ -164,20 +147,8 @@
     color: var(--muted);
   }
 
-  .progress-bar {
-    width: 100%;
-    height: 3px;
-    background: #ddd7cc;
-    border-radius: 2px;
-    overflow: hidden;
-    margin-top: 4px;
-  }
-  .progress-fill {
-    height: 100%;
-    background: var(--ink);
-    width: 0%;
-    transition: width 1s linear;
-  }
+  .progress-bar { width: 100%; height: 3px; background: #ddd7cc; border-radius: 2px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; background: var(--ink); width: 0%; transition: width 1s linear; }
 
   .message-box {
     font-size: 13px;
@@ -206,12 +177,8 @@
     text-align: center;
     transition: background 0.2s;
   }
-  .go-btn:hover {
-    background: #333;
-  }
-  .go-btn.visible {
-    display: block;
-  }
+  .go-btn:hover { background: #333; }
+  .go-btn.visible { display: block; }
 
   .cancel {
     text-align: center;
@@ -222,9 +189,7 @@
     margin-top: -12px;
     cursor: pointer;
   }
-  .cancel:hover {
-    color: var(--red);
-  }
+  .cancel:hover { color: var(--red); }
 
   .footer { display: none; }
 
@@ -232,21 +197,13 @@
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.012) 2px,
-      rgba(0,0,0,0.012) 4px
-    );
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.012) 2px, rgba(0,0,0,0.012) 4px);
     pointer-events: none;
     z-index: 999;
   }
 </style>
 </head>
 <body>
-
-<div class="tape">tiempo libre · atención · vida real · tiempo libre · atención · vida real</div>
 
 <div class="wrapper">
 
@@ -255,7 +212,6 @@
     <p class="subline">Ibas a entrar sin pensarlo.<br>Espera 30 segundos. Luego decides.</p>
   </div>
 
-  <!-- stat-box: ahora oculto por defecto, aparece solo con el contador -->
   <div class="stat-box" id="statBox">
     <p id="statText">…</p>
   </div>
@@ -278,7 +234,6 @@
     </div>
   </div>
 
-  <!-- COUNTER -->
   <div class="counter-section" id="counterSection">
     <div class="counter-wrap">
       <div class="counter-num" id="counterNum">30</div>
@@ -288,16 +243,12 @@
     <div class="message-box" id="messageBox">…</div>
   </div>
 
-  <!-- GO BUTTON -->
   <a id="goBtn" class="go-btn" href="#" target="_blank">Entrar de todas formas →</a>
   <span class="cancel" id="cancelBtn" onclick="cancelAction()" style="display:none;">← no, mejor no</span>
-
-  <div class="footer">100% local · sin datos · sin cuentas</div>
 
 </div>
 
 <script>
-  // Tips que rotan SOLO durante el contador (stat-box oculto al inicio)
   const stats = [
     "El usuario promedio revisa su teléfono <strong>96 veces al día</strong>. La mayoría de esas veces no recuerda por qué lo abrió.",
     "Pasamos un promedio de <strong>2 horas y 27 minutos</strong> al día en redes sociales. Al año, eso son <strong>37 días completos</strong>.",
@@ -311,7 +262,6 @@
     "Abrir una red social <strong>sin intención</strong> es como entrar a un supermercado con hambre y sin lista.",
   ];
 
-  // Mensajes del contador (texto pequeño debajo del número)
   const messages = [
     "¿Qué esperas encontrar que no estaba hace 10 minutos?",
     "La mayoría de scrolls no recuerdas ni lo que viste.",
@@ -364,12 +314,9 @@
     const statBox = document.getElementById('statBox');
     const statText = document.getElementById('statText');
 
-    // Mostrar stat-box con tip aleatorio al iniciar el contador
     statIndex = Math.floor(Math.random() * stats.length);
     statText.innerHTML = stats[statIndex];
     statBox.classList.add('visible');
-
-    // Rotar tips cada 5s mientras dura el contador
     statInterval = setInterval(rotateStat, 5000);
 
     section.classList.add('visible');
@@ -390,7 +337,6 @@
 
     timer = setInterval(() => {
       currentSeconds--;
-
       fill.style.width = ((TOTAL - currentSeconds) / TOTAL * 100) + '%';
       numEl.textContent = currentSeconds;
 

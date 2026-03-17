@@ -1,0 +1,17 @@
+{
+  "name": "No Social Media",
+  "short_name": "NSM",
+  "description": "Pausa antes de entrar a redes sociales.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0ede6",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
