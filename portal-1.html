@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>¿Seguro?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
+
+  :root {
+    --bg: #f0ede6;
+    --ink: #1a1a1a;
+    --red: #c0392b;
+    --muted: #888;
+    --warn: #e8e0d0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Courier Prime', monospace;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* ---- HEADER TAPE ---- */
+  .tape { display: none; }
+
+  /* ---- MAIN WRAPPER ---- */
+  .wrapper {
+    width: 100%;
+    max-width: 440px;
+    padding: 32px 24px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* ---- BIG QUESTION ---- */
+  .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 16vw, 80px);
+    line-height: 0.92;
+    letter-spacing: -1px;
+    color: var(--ink);
+  }
+  .headline span {
+    color: var(--red);
+  }
+
+  .subline {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* ---- STAT BOX ---- */
+  .stat-box {
+    background: var(--warn);
+    border: 1.5px solid #ccc4b4;
+    padding: 16px 18px;
+    border-radius: 2px;
+  }
+  .stat-box p {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #555;
+    transition: opacity 0.4s;
+  }
+  .stat-box strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* ---- NETWORK PICKER ---- */
+  .label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .networks {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .net-btn {
+    background: white;
+    border: 2px solid #ccc4b4;
+    border-radius: 4px;
+    padding: 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .net-btn svg {
+    width: 24px;
+    height: 24px;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+  }
+  .net-btn.selected {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .net-btn.selected svg {
+    opacity: 1;
+    filter: invert(1);
+  }
+
+  /* ---- COUNTER SECTION ---- */
+  .counter-section {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .counter-section.visible {
+    display: flex;
+  }
+
+  .counter-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 0 16px;
+    border-top: 1.5px solid #ccc4b4;
+    border-bottom: 1.5px solid #ccc4b4;
+  }
+
+  .counter-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    line-height: 1;
+    color: var(--ink);
+    transition: color 0.3s;
+  }
+  .counter-num.urgent {
+    color: var(--red);
+  }
+
+  .counter-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 3px;
+    background: #ddd7cc;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--ink);
+    width: 0%;
+    transition: width 1s linear;
+  }
+
+  /* rotating uncomfortable messages */
+  .message-box {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    min-height: 40px;
+    text-align: center;
+    line-height: 1.5;
+    padding: 0 8px;
+    transition: opacity 0.4s;
+  }
+
+  /* ---- GO BUTTON ---- */
+  .go-btn {
+    display: none;
+    width: 100%;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    padding: 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .go-btn:hover {
+    background: #333;
+  }
+  .go-btn.visible {
+    display: block;
+  }
+
+  /* ---- CANCEL LINK ---- */
+  .cancel {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    text-decoration: none;
+    letter-spacing: 1px;
+    margin-top: -12px;
+    cursor: pointer;
+  }
+  .cancel:hover {
+    color: var(--red);
+  }
+
+  .footer { display: none; }
+
+  /* ---- SCAN LINE TEXTURE ---- */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.012) 2px,
+      rgba(0,0,0,0.012) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="tape">tiempo libre · atención · vida real · tiempo libre · atención · vida real</div>
+
+<div class="wrapper">
+
+  <div>
+    <div class="headline">¿De<br>verdad<br><span>ahora?</span></div>
+    <p class="subline">Ibas a entrar sin pensarlo.<br>Espera 30 segundos. Luego decides.</p>
+  </div>
+
+  <div class="stat-box">
+    <p id="statText">…</p>
+  </div>
+
+  <div>
+    <p class="label">¿A dónde ibas?</p>
+    <div class="networks">
+      <button class="net-btn" onclick="selectNet(this, 'https://twitter.com', 'Twitter / X')">
+        <!-- X / Twitter -->
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.261 5.636 5.903-5.636zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        X
+      </button>
+      <button class="net-btn" onclick="selectNet(this, 'https://facebook.com', 'Facebook')">
+        <!-- Facebook -->
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Facebook
+      </button>
+      <button class="net-btn" onclick="selectNet(this, 'https://instagram.com', 'Instagram')">
+        <!-- Instagram -->
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- COUNTER -->
+  <div class="counter-section" id="counterSection">
+    <div class="counter-wrap">
+      <div class="counter-num" id="counterNum">30</div>
+      <div class="counter-label">segundos obligatorios</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="message-box" id="messageBox">…</div>
+  </div>
+
+  <!-- GO BUTTON -->
+  <a id="goBtn" class="go-btn" href="#" target="_blank">Entrar de todas formas →</a>
+  <span class="cancel" id="cancelBtn" onclick="cancelAction()" style="display:none;">← no, mejor no</span>
+
+  <div class="footer">100% local · sin datos · sin cuentas</div>
+
+</div>
+
+<script>
+  const stats = [
+    "El usuario promedio revisa su teléfono <strong>96 veces al día</strong>. La mayoría de esas veces no recuerda por qué lo abrió.",
+    "Pasamos un promedio de <strong>2 horas y 27 minutos</strong> al día en redes sociales. Al año, eso son <strong>37 días completos</strong>.",
+    "Instagram está diseñado para que el scroll no tenga fin. <strong>No hay punto de llegada.</strong> Nunca lo hubo.",
+    "El <strong>86% de las personas</strong> dice que las redes sociales les hacen sentir peor sobre su propia vida.",
+    "Cada notificación libera una pequeña dosis de dopamina. <strong>Igual que una máquina tragamonedas.</strong>",
+    "En el tiempo que dura este contador, podrías haber <strong>respirado profundo 10 veces</strong>. O no hacer nada. También vale.",
+    "Los diseñadores de estas apps <strong>no les dan sus teléfonos a sus propios hijos.</strong>",
+    "La sensación de <em>tengo que revisar</em> dura menos de <strong>90 segundos</strong> si no la alimentas.",
+    "El <strong>70% del contenido</strong> que verás en el feed en los próximos 5 minutos no recordarás mañana.",
+    "Abrir una red social <strong>sin intención</strong> es como entrar a un supermercado con hambre y sin lista.",
+  ];
+
+  let statIndex = 0;
+  function rotateStat() {
+    const el = document.getElementById('statText');
+    el.style.opacity = '0';
+    setTimeout(() => {
+      statIndex = (statIndex + 1) % stats.length;
+      el.innerHTML = stats[statIndex];
+      el.style.opacity = '1';
+    }, 400);
+  }
+
+  // Init first stat randomly and rotate every 5s
+  statIndex = Math.floor(Math.random() * stats.length);
+  document.getElementById('statText').innerHTML = stats[statIndex];
+  setInterval(rotateStat, 5000);
+    "¿Qué esperas encontrar que no estaba hace 10 minutos?",
+    "La mayoría de scrolls no recuerdas ni lo que viste.",
+    "Todavía puedes cerrar esto.",
+    "¿Estás aburrido o evitando algo?",
+    "Este tiempo que esperas ya es tuyo.",
+    "Después de entrar te sentirás igual o peor.",
+    "¿Hay algo más importante que podrías hacer ahora?",
+    "Ninguna notificación es urgente de verdad.",
+    "El feed siempre estará ahí. Este momento, no.",
+    "Puedes parar cuando quieras.",
+  ];
+
+  let selectedUrl = null;
+  let timer = null;
+  let currentSeconds = 30;
+  const TOTAL = 30;
+
+  function selectNet(btn, url, name) {
+    document.querySelectorAll('.net-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedUrl = url;
+    startCounter(name);
+  }
+
+  function startCounter(name) {
+    clearInterval(timer);
+    currentSeconds = TOTAL;
+
+    const section = document.getElementById('counterSection');
+    const numEl = document.getElementById('counterNum');
+    const fill = document.getElementById('progressFill');
+    const msgEl = document.getElementById('messageBox');
+    const goBtn = document.getElementById('goBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    section.classList.add('visible');
+    goBtn.classList.remove('visible');
+    goBtn.style.display = 'none';
+    cancelBtn.style.display = 'block';
+
+    numEl.textContent = currentSeconds;
+    numEl.classList.remove('urgent');
+    fill.style.width = '0%';
+    fill.style.transition = 'none';
+
+    let msgIndex = Math.floor(Math.random() * messages.length);
+    msgEl.textContent = messages[msgIndex];
+
+    // Force reflow for transition restart
+    void fill.offsetWidth;
+    fill.style.transition = 'width 1s linear';
+
+    timer = setInterval(() => {
+      currentSeconds--;
+
+      fill.style.width = ((TOTAL - currentSeconds) / TOTAL * 100) + '%';
+      numEl.textContent = currentSeconds;
+
+      if (currentSeconds <= 10) numEl.classList.add('urgent');
+
+      // rotate message every ~8 seconds
+      if (currentSeconds % 8 === 0) {
+        msgEl.style.opacity = '0';
+        setTimeout(() => {
+          msgIndex = (msgIndex + 1) % messages.length;
+          msgEl.textContent = messages[msgIndex];
+          msgEl.style.opacity = '1';
+        }, 400);
+      }
+
+      if (currentSeconds <= 0) {
+        clearInterval(timer);
+        fill.style.width = '100%';
+        msgEl.textContent = "Puedes entrar. Todavía puedes no hacerlo.";
+        goBtn.href = selectedUrl;
+        goBtn.classList.add('visible');
+        goBtn.style.display = 'block';
+      }
+    }, 1000);
+  }
+
+  function cancelAction() {
+    clearInterval(timer);
+    document.querySelectorAll('.net-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('counterSection').classList.remove('visible');
+    document.getElementById('goBtn').style.display = 'none';
+    document.getElementById('cancelBtn').style.display = 'none';
+    document.getElementById('counterNum').classList.remove('urgent');
+    selectedUrl = null;
+  }
+</script>
+</body>
+</html>
